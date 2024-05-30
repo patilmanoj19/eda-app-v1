@@ -87,13 +87,16 @@ def plot_categorical_data(df):
     categorical_columns = df.select_dtypes(include=['object', 'category']).columns
     st.subheader("Categorical Data Distribution")
     for col in categorical_columns:
-        st.write(f"**{col}**")
-        fig, ax = plt.subplots(figsize=(8, 4))
-        
-        sns.countplot(y=df[col], order=df[col].value_counts().index, ax=ax)
-        ax.set_title(f'Value Counts of {col}')
-        
-        st.pyplot(fig)
+        if df[col].nunique() > 25:
+            st.write(f"**{col}** has too many unique values to display.")
+        else:
+            st.write(f"**{col}**")
+            fig, ax = plt.subplots(figsize=(8, 4))
+            
+            sns.countplot(y=df[col], order=df[col].value_counts().index, ax=ax)
+            ax.set_title(f'Value Counts of {col}')
+            
+            st.pyplot(fig)
 
 # Function to display the correlation matrix
 def plot_correlation_matrix(df):
