@@ -10,7 +10,6 @@ st.markdown('''
 # **Exploratory Data Analysis(EDA) Application**
 
 This is the **EDA App** created in Streamlit for basic data exploration.
-
 **Credit:** App built in `Python` + `Streamlit` by [Manojkumar Patil](https://www.linkedin.com/in/patilmanojkumar)
 ---
 ''')
