@@ -137,7 +137,7 @@ def main():
             # Example data
             @st.cache_data
             def load_example_data():
-                return pd.read_csv('https://raw.githubusercontent.com/patilmanoj19/eda-app-v1/main/Bangalore_Price_Data_Wheat.csv')
+                return pd.read_csv('https://github.com/patilmanoj19/eda-app-v1/raw/main/Titanic-Dataset.csv')
             
             example_df = load_example_data()
             st.write(example_df.head())
