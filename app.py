@@ -7,12 +7,9 @@ from io import StringIO  # Import StringIO for buffering info output
 
 # Web App Title
 st.markdown('''
-# **EDA App**
-
+# **Exploratory Data Analysis(EDA) Application**
 This is the **EDA App** created in Streamlit for basic data exploration.
-
 **Credit:** App built in `Python` + `Streamlit` by [Manojkumar Patil](https://www.linkedin.com/in/patilmanojkumar)
-
 ---
 ''')
 
