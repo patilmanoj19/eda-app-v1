@@ -10,10 +10,11 @@ st.markdown('''
 # **Exploratory Data Analysis(EDA) Application**
 
 This is the **EDA App** created in Streamlit for basic data exploration.
+
 **Credit:** App built in `Python` + `Streamlit` by [Manojkumar Patil](https://www.linkedin.com/in/patilmanojkumar)
+
 ---
 ''')
-
 # File uploader
 with st.sidebar.header('Upload your CSV or Excel file'):
     uploaded_file = st.sidebar.file_uploader("Upload your input file", type=["csv", "xlsx"])
