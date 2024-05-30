@@ -1,62 +1,76 @@
-import pandas as pd
 import streamlit as st
+import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
+from scipy.stats import pearsonr, spearmanr, chi2_contingency, anderson
+from wordcloud import WordCloud
 
-dataframe = None
+# Function to perform univariate analysis
+def univariate_analysis(data, selected_column):
+    st.subheader("Univariate Analysis")
+    # Display histogram
+    st.write("### Histogram")
+    plt.hist(data[selected_column], bins=20, color='skyblue', edgecolor='black')
+    st.pyplot()
 
-def upload_file(file):
-    global dataframe
-    if file.name.endswith('.csv'):
-        dataframe = pd.read_csv(file)
-    elif file.name.endswith('.xlsx'):
-        dataframe = pd.read_excel(file)
-    return {"filename": file.name}
+    # Display distribution plot
+    st.write("### Distribution Plot")
+    sns.distplot(data[selected_column], hist=True, kde=True, color='blue')
+    st.pyplot()
 
-def do_eda():
-    global dataframe
-    if dataframe is None:
-        return {"error": "No file uploaded"}
+    # Additional analysis tasks can be added here
 
-    st.title("Exploratory Data Analysis")
-    st.write("## DataFrame Info")
-    st.write(dataframe.info())
-    st.write("## DataFrame Description")
-    st.write(dataframe.describe())
+# Function to perform bivariate analysis
+def bivariate_analysis(data, selected_column1, selected_column2):
+    st.subheader("Bivariate Analysis")
+    # Display scatter plot
+    st.write("### Scatter Plot")
+    plt.figure(figsize=(8, 6))
+    sns.scatterplot(x=selected_column1, y=selected_column2, data=data)
+    st.pyplot()
 
-    st.write("## Univariate Analysis")
-    for column in dataframe.select_dtypes(include=['float64', 'int64']).columns:
-        st.write(f"### {column}")
-        st.write(dataframe[column].describe())
-        plt.hist(dataframe[column])
-        plt.xlabel(column)
-        plt.ylabel("Frequency")
-        st.pyplot()
+    # Additional analysis tasks can be added here
 
-        plt.figure()
-        plt.title(f"{column} Distribution")
-        plt.xlabel(column)
-        plt.ylabel("Density")
-        dataframe[column].plot.kde()
-        st.pyplot()
+# Function to perform multivariate analysis
+def multivariate_analysis(data, selected_columns):
+    st.subheader("Multivariate Analysis")
+    # Display heatmap
+    st.write("### Heatmap")
+    sns.heatmap(data[selected_columns].corr(), annot=True, cmap='coolwarm', fmt=".2f")
+    st.pyplot()
 
-    st.write("## Bivariate Analysis")
-    numeric_columns = dataframe.select_dtypes(include=['float64', 'int64']).columns
-    for i, column1 in enumerate(numeric_columns):
-        for j, column2 in enumerate(numeric_columns):
-            if i != j:
-                st.write(f"### {column1} vs {column2}")
-                plt.scatter(dataframe[column1], dataframe[column2])
-                plt.xlabel(column1)
-                plt.ylabel(column2)
-                st.pyplot()
+    # Additional analysis tasks can be added here
 
-    return {"status": "EDA completed"}
+def main():
+    st.title("Exploratory Data Analysis (EDA)")
 
-# Streamlit UI
-st.sidebar.title("Upload File")
-file = st.sidebar.file_uploader("Upload a file", type=["csv", "xlsx"])
+    # Upload dataset
+    uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        st.write(data.head())
 
-if file is not None:
-    upload_file(file)
-    if st.sidebar.button("Perform EDA"):
-        do_eda()
+        # Display basic information about the dataset
+        st.write("### Basic Information")
+        st.write(data.info())
+
+        # Select variable for analysis
+        selected_column = st.selectbox("Select a variable for analysis", data.columns)
+
+        # Perform univariate analysis
+        univariate_analysis(data, selected_column)
+
+        # Perform bivariate analysis (select two variables)
+        if st.checkbox("Perform Bivariate Analysis"):
+            selected_column1 = st.selectbox("Select first variable", data.columns)
+            selected_column2 = st.selectbox("Select second variable", data.columns)
+            bivariate_analysis(data, selected_column1, selected_column2)
+
+        # Perform multivariate analysis
+        if st.checkbox("Perform Multivariate Analysis"):
+            selected_columns = st.multiselect("Select variables for analysis", data.columns)
+            multivariate_analysis(data, selected_columns)
+
+# Execute the main function
+if __name__ == "__main__":
+    main()
