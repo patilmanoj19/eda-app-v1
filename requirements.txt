@@ -5,7 +5,4 @@ wordcloud
 streamlit
 pandas
 numpy
-ydata-profiling
-streamlit-pandas-profiling
-Jinja2
 
