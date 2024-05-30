@@ -19,9 +19,6 @@ This is the **EDA App** created in Streamlit for basic data exploration.
 # File uploader
 with st.sidebar.header('Upload your CSV or Excel file'):
     uploaded_file = st.sidebar.file_uploader("Upload your input file", type=["csv", "xlsx"])
-    st.sidebar.markdown("""
-[Example CSV input file](https://raw.githubusercontent.com/patilmanoj19/eda-app-v1/main/Bangalore_Price_Data_Wheat.csv)
-""")
 
 # Load data
 def load_data(file):
