@@ -27,11 +27,20 @@ with st.sidebar.header('Upload your CSV or Excel file'):
 def load_data(file):
     if file is not None:
         try:
-            df = pd.read_csv(file)
+            if file.name.endswith('.csv'):
+                df = pd.read_csv(file)
+                return df, None
+            elif file.name.endswith('.xlsx'):
+                xls = pd.ExcelFile(file)
+                if len(xls.sheet_names) == 1:
+                    df = pd.read_excel(file, sheet_name=xls.sheet_names[0])
+                    return df, None
+                else:
+                    return None, xls.sheet_names
         except Exception as e:
-            df = pd.read_excel(file)
-        return df
-    return None
+            st.error(f"Error loading file: {e}")
+            return None, None
+    return None, None
 
 # Function to display basic dataset information
 def display_basic_info(df):
@@ -100,7 +109,11 @@ def plot_correlation_matrix(df):
 
 # Main function
 def main():
-    df = load_data(uploaded_file)
+    df, sheet_names = load_data(uploaded_file)
+    
+    if sheet_names is not None:
+        sheet = st.sidebar.selectbox('Select the sheet to perform EDA on', sheet_names)
+        df = pd.read_excel(uploaded_file, sheet_name=sheet)
     
     if df is not None:
         st.header('**Input DataFrame**')
